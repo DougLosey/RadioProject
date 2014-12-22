@@ -27,8 +27,14 @@ var walk = function(dir, done) {
           results.push(file);
           var parser = mm(fs.createReadStream(file), {duration: true});
           parser.on('metadata', function(res){
-            var duration = (res.duration/60);
-            var seconds = duration
+            var duration = ((res.duration/60).toFixed(2));
+            console.log(duration)
+            var seconds = duration.toString().split(".");
+            minutes = seconds[0];
+            seconds = Math.ceil(((seconds[1]/100)*60))
+            console.log(seconds);
+            duration = Number(minutes + "." + seconds)
+            console.log(duration)
             var song = {
               artist: res.artist,
               title: res.title,
@@ -36,6 +42,7 @@ var walk = function(dir, done) {
               genre: res.genre
             }
             console.log(song);
+            console.log(results)
           })
           if (!--pending) done(null, results);
         }
